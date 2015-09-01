@@ -1,0 +1,51 @@
+
+FONTLOG for Alfphabet-IV
+-------------------
+This file provides detailed information on the Alfphabet-IV font software.
+This information should be distributed along with the Alfphabet-IV fonts
+and any derivative works.
+
+Basic Font Information
+--------------------------
+Copyright (c) 2007-2010, OSP (http://ospublish.constantvzw.org)
+The Alfphabet family is based on the Belgian road signage (1945-1975, originally from 3M system working for the Marshall plan after the end of the war).
+Alfphabet IV was redrawn by Pierre Huyghebaert and Ludi at Speculoos studio in 2007.
+
+Alfphabet-IV currently provides the following Unicode coverage:
+Basic Latin: 95/95 
+Latin-1 Supplement: 60/96 
+
+Information for Contributors
+------------------------------
+Copyright (C) 2007-2010 OSP (Pierre Huyghebaert and Ludivine Loiseau).
+
+This Font Software is Copyright (c) 2003-2006, Philipp H. Poll (http://linuxlibertine.sf.net/).
+All Rights Reserved.
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+
+You should have received a copy of the license along with this Font Software (either in stand-alone text files, human-readable headers or in the appropriate machine-readable metadata fields within text or binary files).
+
+See the project website for the current trunk and the various branches:
+http://ospublish.constantvzw.org/foundry/alfphabet
+
+ChangeLog
+----------
+
+Acknowledgements
+-------------------------
+If you make modifications be sure to add your name (N), email (E), web-address
+(W) and description (D). This list is sorted by last name in alphabetical
+order.)
+
+N: Ludivine Loiseau 
+E: 
+W: http://ospublish.constantvzw.org 
+D: 
+
+N: Pierre Huyghebaert, 
+E: pierre@speculoos.com
+W: http://ospublish.constantvzw.org 
+D: 
+
+

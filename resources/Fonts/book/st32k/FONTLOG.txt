@@ -1,0 +1,43 @@
+FONTLOG.txt for st37k
+
+OFL Open Font License
+http://scripts.sil.org/OFL
+
+Font St37k and St32k by Uwe Borchert 
+E-Mail: uwe.borchert@gmx.de
+
+Based on the capital letters from »Stahl« (Koch/Kühne)
+createtd by Rudolf Koch for the unfinished »Offenbach«.
+
+Use St32k with 70% of St37k and you will get similar
+strokes like writen with the same brush.
+
+ChangeLog
+
+12.12.2010 Version 1.5
+- modified umlauts and accented charaters
+- added thorn and eth
+
+05.09.2010 Version 1.4
+- St37k: height: H, I, U, V, W, X, Y, Z
+- St32k: corrected stroke ends, letter S
+- addes [C|c]cedilla 
+
+31.03.2010 Version 1.3
+- added emdash, endash, ellipsis,
+  quotedoubleleft, quotedoubleright, quotedoublebase
+
+28.03.2010 Version 1.2
+- changed Ver 1.1 to real accented characters
+- minor changes: asciicircum, A
+
+14.02.2010 Version 1.1
+- autowithh to 120, added kerning, correced direction
+- Changed J, Q and british pound
+- added ordre maskulin, per cent and per mille sign 
+
+06.02.2010 Version 1.0a
+- changed J
+
+19.01.2010 (Uwe Borchert) Version 1.0
+- Released as "st37k"
