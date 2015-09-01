@@ -1,4 +1,6 @@
-# Byte
+# Bytehub
 
-* [API Documentation](./api.md)
-* [BFF (Byte File Format) documentation](./bff.md)
+More coming soon! Questions, feedback, or need support? Please use our Github Issues page.
+
+* [API Docs](./api.md)
+* [Byte File Format (BFF)](./bff.md)
