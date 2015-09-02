@@ -45,6 +45,7 @@ Okay, let's dive in!
 * [Flags](#flags)
 * [Activity](#activity)
 * [Posts (Creation)](#posts-creation)
+* [Computers](#computers)
 
 
 
@@ -1466,3 +1467,138 @@ curl -X DELETE -H "Authorization: Bearer <token>" -H "Accept: application/json" 
 | Code | Message |
 | :---: | :--- |
 | 1107 | User permissions error |
+
+
+
+## Computers
+
+Computers appear in the Byte client and provide an extended creator feature set for the user.
+
+| Method | Endpoint | Description |
+| :---: | :--- | :--- |
+| `GET` | [`/computers`](#get-computers) | Returns a list of all computers |
+| `GET` | [`/computers/featured`](#get-computersfeatured) | Returns a list of featured computers |
+| `GET` | [`/computers/installed`](#get-computersinstalled-requires-authentication-header) | Returns a list of the computers installed by a user |
+| `POST` | [`/computers/<string:computer_id>/install`](#post-computersstringcomputer_idinstall-requires-authentication-header) | Installs a computer by ID for the authenticated user |
+| `DELETE` | [`/computers/<string:computer_id>/install`](#delete-computersstringcomputer_idinstall-requires-authentication-header) | Uninstalls a computer by ID for the authenticated user |
+
+
+### **GET** `/computers`
+
+The `GET /computers` endpoint returns a list of all computers.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Accept:application/json" https://api.byte.co/v1/computers
+```
+
+#### Sample Response
+
+```json
+{
+    "data": [
+        {
+            "id": "<computerId>",
+            "name": "Gifs",
+            "endpoint": "http://computers.byte.co/computers/gifs",
+            "description": "Giphy (Stickers + Gifs)"
+        }
+    ],
+    "success": 1
+}
+```
+
+
+### **GET** `/computers/featured`
+
+The `GET /computers/featured` endpoint returns a list of featured computers.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Accept:application/json" https://api.byte.co/v1/computers/featured
+```
+
+#### Sample Response
+
+```json
+{
+    "data": [
+        {
+            "id": "<computerId>",
+            "name": "Gifs",
+            "endpoint": "http://computers.byte.co/computers/gifs",
+            "description": "Giphy (Stickers + Gifs)"
+        }
+    ],
+    "success": 1
+}
+```
+
+
+### **GET** `/computers/installed` (requires authentication header)
+
+The `GET /computers/installed` endpoint returns a list of the computers installed by a user.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" https://api.byte.co/v1/computers/installed
+```
+
+#### Sample Response
+
+```json
+{
+    "data": [
+        {
+            "id": "<computerId>",
+            "name": "Gifs",
+            "endpoint": "http://computers.byte.co/computers/gifs",
+            "description": "Giphy (Stickers + Gifs)"
+        }
+    ],
+    "success": 1
+}
+```
+
+
+### **POST** `/computers/<string:computer_id>/install` (requires authentication header)
+
+The `POST /computers/<string:computer_id>/install` endpoint installs a computer by ID for the authenticated user.
+
+#### Sample Query
+
+```bash
+curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/computers/<string:computer_id>/install -d '{}'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {},
+    "success": 1
+}
+```
+
+
+### **DELETE** `/computers/<string:computer_id>/install` (requires authentication header)
+
+The `DELETE /computers/<string:computer_id>/install` endpoint uninstalls a computer by ID for the authenticated user.
+
+#### Sample Query
+
+```bash
+curl -X DELETE -H "Authorization: Bearer <token>" -H "Accept:application/json" https://api.byte.co/v1/computers/<string:computer_id>/install
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {},
+    "success": 1
+}
+```
