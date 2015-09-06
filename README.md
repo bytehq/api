@@ -1,9 +1,11 @@
 # Bytehub
 
-More coming soon! 
+#### Resources
 
 * **[API Docs](./api.md)**
 * **[Byte File Format (BFF)](./bff.md)**
+
+More coming soon!
 
 #### Implementations
 * **[byte.js](https://github.com/bytehq/byte.js)** — A web renderer for Bytes / BFF
