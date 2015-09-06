@@ -1,7 +1,5 @@
 # Bytehub
 
-#### Resources
-
 * **[API Docs](./api.md)**
 * **[Byte File Format (BFF)](./bff.md)**
 
