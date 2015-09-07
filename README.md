@@ -7,6 +7,7 @@ More coming soon!
 
 #### Implementations
 * **[byte.js](https://github.com/bytehq/byte.js)** — A web renderer for Bytes / BFF
+* **[byte-music-converter](https://github.com/bytehq/byte-music-converter)** - Converts Byte music to MIDI/WAV/MP3
 * **[Boogle](https://github.com/Donohue/boogle)** — Byte search engine
 * **[ByteSharp](https://github.com/drasticactions/ByteSharp)** — C# Byte API library
 * **[byte-music.js](https://github.com/audionerd/byte-music.js)** - Javascript Byte Music Player
