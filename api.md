@@ -1269,7 +1269,7 @@ The `GET /files/session` endpoint generates a unique endpoint to which an asset 
 #### Sample Query
 
 ```bash
-curl -X GET -H "Accept:application/json" https://api.byte.co/v1/files/session
+curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" https://api.byte.co/v1/files/session
 ```
 
 #### Sample Response
