@@ -27,7 +27,8 @@ Before we get started, a few things of note:
     }
 }
 ```
-* We strongly recommend using gzip for your requests: `-H "User-Agent: gzip"`
+* We strongly recommend using gzip for your requests by including
+`-H "Accept-Encoding: gzip"` and `-H "User-Agent: gzip (Client/OS/Version/Build)"` headers
 * Remember to use the appropriate Content-Type (`-H "Content-Type:application/json"`) and Accept (`-H "Accept:application/json"`) headers
 
 Okay, let's dive in!
@@ -126,7 +127,6 @@ curl -X POST -H "Content-Type:application/json" -H "Accept:application/json" htt
 
 | Code | Message |
 | :---: | :--- |
-| 1100 | Generic User Error |
 | 1110 | Expired/invalid auth code |
 | 1114 | User suspended |
 
