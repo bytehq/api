@@ -27,8 +27,25 @@ Before we get started, a few things of note:
     }
 }
 ```
-* We strongly recommend using gzip for your requests: `-H "User-Agent: gzip"`
-* Remember to use the appropriate Content-Type (`-H "Content-Type:application/json"`) and Accept (`-H "Accept:application/json"`) headers
+
+### Headers
+To gracefully support older versions of your app (and ours!), and ensure that the BFF model can evolve safely, we need all of our clients to include a custom `User-Agent` value in addition to specifying gzip support.  Follow this structure:
+
+```
+   User-Agent: "gzip companyName/typeOfApp/BFFVersion/AppVersion"
+```
+
+So, let's pretend you work at a company called Bugle, and you made a clever web app using the Byte API that played the music of a random byte that had great tunes.  You built the web app assuming that the latest BFF model version was 1.0, and you've made 3 deploys to your web app and you arbitrarily versioned it "1.3beta".  You should include this string in every request as your `User-Agent`:
+
+```
+   User-Agent: "gzip Bugle/web/1.0/1.3beta"
+``` 
+
+
+Also, use the appropriate Content-Type (`-H "Content-Type:application/json"`) and Accept (`-H "Accept:application/json"`) headers. 
+
+
+
 
 Okay, let's dive in!
 
