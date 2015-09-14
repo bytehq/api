@@ -422,7 +422,8 @@ Each Byte consists of a number of pieces of information:
 * `package`: Defined in the [BFF (Byte File Format)](./bff.md)
 * `caption`: A brief title string
 * `name`: The addressable endpoint for the Byte
-* `thumbnailUrl`: A url to a thumbnail image of the Byte
+* `thumbnailSrc`: A url to a thumbnail image of the Byte
+* `musicSrc`: An optional url to an mp3 generated from the music object on the post
 
 <img src="./assets/byte-1.jpeg" width="350" />
 <img src="./assets/byte-2.jpeg" width="350" />
@@ -478,6 +479,7 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
                 }
             ],
             "thumbnailSrc": "<thumbnailSrc>",
+            "musicSrc": "<musicSrc>",
             "hidden": false,
             "boost": 0,
             "updated": 1441050296279,
@@ -558,6 +560,7 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H 
                     }
                 ],
                 "thumbnailSrc": "<thumbnailSrc>",
+                "musicSrc": "<musicSrc>",
                 "hidden": false,
                 "boost": 0,
                 "updated": 1441050296279,
@@ -642,6 +645,7 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H 
                 }
             ],
             "thumbnailSrc": "<thumbnailSrc>",
+            "musicSrc": "<musicSrc>",
             "hidden": false,
             "boost": 0,
             "updated": 1441050296279,
@@ -1353,6 +1357,7 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
       "id": "<postId>",
       "comments": [],
       "thumbnailSrc": "<thumbnailSrc>",
+      "musicSrc": "<musicSrc>",
       "hidden": true,
       "boost": 0,
       "updated": 1441054921814,
@@ -1420,6 +1425,7 @@ curl -X PUT -H "Authorization: Bearer <token>" -H "Content-Type: application/jso
       "id": "<postId>",
       "comments": [],
       "thumbnailSrc": "<thumbnailSrc>",
+      "musicSrc": "<musicSrc>",
       "hidden": true,
       "boost": 0,
       "updated": 1441054921814,
