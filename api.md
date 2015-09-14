@@ -329,6 +329,7 @@ Names are a Byte representation of URLs on the legacy web—they map a human–r
 * Valid characters are alphanumeric, `_`, and `-`
 * A single `#` is allowed at the end of the name—this indicates a hidden Byte
 * Original casing is stored on the Byte, but "Apple" is the same as "apple" for lookup/claim purposes
+* The special name `random` points to a random byte rather than a particular byte
 
 A simple Python reg–ex to enforce this rule set is: `^[-\w]{2,60}#?$`
 
@@ -748,6 +749,7 @@ Optional query params:
 
 * `scheme`: One of `summary` or `full`
 * `cursor`: A String designating the current position in a query result set
+* `excludeBlanks`: If true, exclude blank posts from the results.
 
 #### Sample Query
 
