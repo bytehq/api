@@ -1013,7 +1013,7 @@ curl -X DELETE -H "Authorization: Bearer <token>" -H "Accept: application/json" 
 
 ### **GET** `/posts/favs` (requires authentication header)
 
-The `GET /posts/favs` endpoint gets a list of the current user's starred Bytes, ordered by star date.
+The `GET /posts/favs` endpoint gets a list of the current user's starred Bytes, ordered by post updated time.
 
 Optional query params:
 
