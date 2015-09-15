@@ -197,7 +197,7 @@ name | description | type
 These banks correspond to sound banks `0` to `15` in the Byte Soundfont, except for `drums`, which corresponds to sound bank `127`.
 
 **Supported drum hit names:**
-`"Kick"`, `"Snare"`, `"Clap"`, `"Hat"`, `"Thump"`, `"Glitch"`, `"Tambourine"`, `"Whistle"`, `"Block"`, `"Stick"`, `"Shaker"`, `"Crash"`, `"Tom"`, `"Conga"`, `"Cowbell"`, `"Yeah"`
+`"Thump"`, `"Kick"`, `"Glitch"`, `"Snare"`, `"Clap"`, `"Tambourine"`, `"Whistle"`, `"Hat"`, `"Block"`, `"Stick"`, `"Shaker"`, `"Crash"`, `"Tom"`, `"Conga"`, `"Cowbell"`, `"Yeah"`
 
 These hits correspond to MIDI notes `35` to `50` in the Byte Soundfont's `drums` bank.
 
