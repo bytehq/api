@@ -1,4 +1,4 @@
-# bff 😘
+# bff 1.1 😘
 
 bff (**B**yte **F**ile **F**ormat) is the format used by software to render or publish Bytes. A bff document contains plaintext JSON that describes all of the objects and instructions that make up a Byte.
 
@@ -31,7 +31,7 @@ Importantly, **the coordinate space in a bff is top-left aligned**.
 ```
 ##Version
 
-The format of the `version` property is `"1.0"`.
+The format of the `version` property is `"1.1"`.
 
 Versions are incremented with the following rules:
 
@@ -59,6 +59,7 @@ name | description | type
 `transform` | The top two rows of a 3x3 affine transformation matrix for rotation, scaling, translation. Applied **after** the `frame` is set.<br>Format is `[[A, B], [C, D], [TX, TY]]`. | Array of Arrays of Floats
 `opacity` | The alpha value of the object.<br>Valid values are `0.0` to `1.0` | Float
 `effects` | Animation effects that are applied to the object.<br>See [Effects](#effects) for possible values. | Array of Strings
+`originalSrc` | Optional url linking to the original source of the object. | String
 
 Object `type` values:
 - [paragraph](#paragraph)
@@ -282,3 +283,9 @@ Style | Font
 :-------------|:---------
 `sans` | GraphikApp-Semibold
 `serif` | TiemposSemibold
+
+
+##Changelog
+
+Version 1.1:
+* Added optional `originalSrc` property to objects
