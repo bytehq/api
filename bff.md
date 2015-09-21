@@ -59,7 +59,7 @@ name | description | type
 `transform` | The top two rows of a 3x3 affine transformation matrix for rotation, scaling, translation. Applied **after** the `frame` is set.<br>Format is `[[A, B], [C, D], [TX, TY]]`. | Array of Arrays of Floats
 `opacity` | The alpha value of the object.<br>Valid values are `0.0` to `1.0` | Float
 `effects` | Animation effects that are applied to the object.<br>See [Effects](#effects) for possible values. | Array of Strings
-`originalSrc` | Optional url linking to the original source of the object. | String
+`originalSrc` | Optional web url linking to the original source of the object. Example: http://cg-horses.tumblr.com/post/44175751464 | String
 
 Object `type` values:
 - [paragraph](#paragraph)
