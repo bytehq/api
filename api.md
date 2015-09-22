@@ -40,10 +40,10 @@ So, let's pretend you work at a company called Bugle, and you made a clever web 
 
 ```
    User-Agent: "gzip (Bugle/web/1.0/1.3beta)"
-``` 
+```
 
 
-Also, use the appropriate Content-Type (`-H "Content-Type:application/json"`), Accept (`-H "Accept:application/json"`), and Accept-Encoding (`-H "Accept-Encoding: gzip"`) headers. 
+Also, use the appropriate Content-Type (`-H "Content-Type:application/json"`), Accept (`-H "Accept:application/json"`), and Accept-Encoding (`-H "Accept-Encoding: gzip"`) headers.
 
 Okay, let's dive in!
 
@@ -127,6 +127,7 @@ curl -X POST -H "Content-Type:application/json" -H "Accept:application/json" htt
 {
     "data": {
         "token": "<token>",
+        "firstAuth": true,
         "user": {
             "created": 1439504708109,
             "createdString": "1439504708109",
@@ -176,6 +177,8 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
 {
     "data": {
         "username": "",
+        "created": 1442932401721,
+        "createdString": "1442932401721",
         "latestMessageString": "1440981197064",
         "latestMessage": 1440981197064,
         "userId": "<userId>",
@@ -836,12 +839,15 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
 ## Comments
 
 Users can place comments and stickers on individual Bytes. Offensive or inappropriate comments may be deleted without warning.
+Users can edit or delete comments that they created. The author of a post can delete other users' comments from it.
 
 <img src="./assets/byte-3.jpeg" width="350" />
 
 | Method | Endpoint | Description |
 | :---: | :--- | :--- |
 | `POST` | [`/posts/id/<string:post_id>/comments`](#post-postsidstringpost_idcomments-requires-authentication-header) | Places a comment on a Byte by ID |
+| `PUT` | [`/posts/id/<string:post_id>/comments/<string:comment_id>`](#user-content-put-postsidstringpost_idcommentsstringcomment_id-requires-authentication-header) | Updates a comment |
+| `DELETE` | [`/posts/id/<string:post_id>/comments/<string:comment_id>`](#user-content-delete-postsidstringpost_idcommentsstringcomment_id-requires-authentication-header) | Deletes a comment |
 
 
 ### **POST** `/posts/id/<string:post_id>/comments` (requires authentication header)
@@ -958,6 +964,115 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
 | Code | Message |
 | :---: | :--- |
 | 1801 | Post does not exist |
+
+
+
+### **PUT** `/posts/id/<string:post_id>/comments/<string:comment_id>` (requires authentication header)
+
+The `PUT /posts/id/<string:post_id>/comments/<string:comment_id>` endpoint updates a comment. Users can only update their own comments.
+
+| Parameter | Type | Description | Example |
+| :---: | :---: | :--- | :--- |
+| `point` | Object | Optional. `(x, y)` coordinates of the centre point of the comment corresponding to the location of the comment on the 324x570 canvas. | `{"x": 120, "y": 120}` |
+| `body` | String | Optional. A comment String. This can include unicode and emoji characters, but links will not be parsed. | `"Hello!"` |
+| `sticker` | String | Optional. A String corresponding to a sticker asset. | `"StickerCrab"` |
+
+All arguments are optional. Note that the type of a comment cannot be changed from text to sticker or vice versa.
+A modified `body` field can only be included for a comment that already has a body (a text comment) and a modified `sticker` field can only be included for a comment that already has a sticker type.
+
+See comment creation for a list of sticker types.
+
+
+#### Sample Queries
+
+```bash
+curl -X PUT -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -H "Accept: application/json" https://api.byte.co/v1/posts/id/<id>/comments/<comment_id> -d '{"body": "<updated body>"}'
+```
+
+```bash
+curl -X PUT -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -H "Accept: application/json" https://api.byte.co/v1/posts/id/<id>/comments/<comment_id> -d '{"point": {"x": 192, "y": 297}, "sticker": "StickerHeart"}'
+```
+
+#### Sample Responses
+
+```json
+{
+    "data": {
+        "comment": {
+            "body": "<updated body>",
+            "author": null,
+            "point": {
+                "y": 297.0,
+                "x": 192.0
+            },
+            "markup": [],
+            "created": 1441057587673,
+            "createdString": "1441057587673",
+            "postId": "<postId>",
+            "type": "text",
+            "id": "<commentId>"
+        }
+    },
+    "success": 1
+}
+```
+
+```json
+{
+    "data": {
+        "comment": {
+            "author": null,
+            "point": {
+                "y": 297.0,
+                "x": 192.0
+            },
+            "sticker": "StickerHeart",
+            "created": 1441132161871,
+            "createdString": "1441132161871",
+            "postId": "<postId>",
+            "type": "sticker",
+            "id": "<commentId>"
+        }
+    },
+    "success": 1
+}
+```
+
+#### Error States
+
+| Code | Message |
+| :---: | :--- |
+| 1801 | Post does not exist |
+| 2004 | User does not have permissions to update comment |
+
+
+
+
+### **DELETE** `/posts/id/<string:post_id>/comments/<string:comment_id>` (requires authentication header)
+
+The `DELETE /posts/id/<string:post_id>/comments/<string:comment_id>` endpoint deletes a comment. Users can delete their own comments and any comments on posts that they created.
+
+#### Sample Query
+
+```bash
+curl -X DELETE -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -H "Accept: application/json" https://api.byte.co/v1/posts/id/<id>/comments/<comment_id>
+```
+
+#### Sample Responses
+
+```json
+{
+    "data": {},
+    "success": 1
+}
+```
+
+#### Error States
+
+| Code | Message |
+| :---: | :--- |
+| 1801 | Post does not exist |
+| 2004 | User does not have permissions to modify comment |
 
 
 
