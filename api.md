@@ -1624,6 +1624,10 @@ Computers appear in the Byte client and provide an extended creator feature set 
 
 The `GET /computers` endpoint returns a list of all computers.
 
+Optional query params:
+
+* `alphabeticalSort`: `Boolean` (default `True`). If set to `False`, returns custom sorting defined by Byte.
+
 #### Sample Query
 
 ```bash
