@@ -56,7 +56,7 @@ Okay, let's dive in!
 * [Names](#names)
 * [Posts (Consumption)](#posts-consumption)
 * [Comments](#comments)
-* [Stars](#stars)
+* [Bookmarks](#bookmarks)
 * [Flags](#flags)
 * [Activity](#activity)
 * [Posts (Creation)](#posts-creation)
@@ -129,10 +129,13 @@ curl -X POST -H "Content-Type:application/json" -H "Accept:application/json" htt
         "token": "<token>",
         "firstAuth": true,
         "user": {
-            "created": 1439504708109,
-            "createdString": "1439504708109",
-            "timeZone": "America/Toronto",
-            "id": "<userId>"
+            "username":"<username>",
+            "description":null,
+            "created":1439589853533,
+            "profilePhoto":"<photoUrl>",
+            "createdString":"1439589853533",
+            "timeZone":"America/New_York",
+            "id":"<userId>"
         }
     },
     "success": 1
@@ -150,7 +153,7 @@ curl -X POST -H "Content-Type:application/json" -H "Accept:application/json" htt
 
 ## Users
 
-Since Byte is mostly anonymous, user accounts aren't really accounts at all—they're simply a way of tying a set of posts to a single author. As such, we don't have much in the way of user management routes.
+Endpoints for looking up and managing users
 
 | Method | Endpoint | Description |
 | :---: | :--- | :--- |
@@ -159,6 +162,11 @@ Since Byte is mostly anonymous, user accounts aren't really accounts at all—th
 | `POST` | [`/account`](#post-account-requires-authentication-header) | Updates account information |
 | `POST` | [`/users/self/deactivate`](#post-usersselfdeactivate-requires-authentication-header) | Deactivates the current user account |
 | `POST` | [`/users/self/reactivate`](#post-usersselfreactivate-requires-authentication-header) | Reactivates the current user account |
+| `POST` | [`/account/check-name`](#post-check-name-requires-authentication-header) | Checks whether a name is available |
+| `GET` | [`/user/feed`](#get-user-feed-requires-authentication-header) | Fetches the user's feed |
+| `GET` | [`/users/recommended`](#get-users-recommended-requires-authentication-header) | Fetches the list of recommended users |
+| `GET` | [`/users/u/<username>`](#get-users-u-username-requires-authentication-header) | Looks up a user's profile by username |
+| `GET` | [`/users/id/<userId>`](#get-users-id-userid-requires-authentication-header) | Looks up a user's profile by user id |
 
 
 ### **GET** `/status` (requires authentication header)
@@ -210,17 +218,17 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
 ```json
 {
     "data": {
-        "username": "",
+        "username": "<username>",
         "phoneSearchOptOut": false,
         "description": null,
         "created": 1439504708109,
+        "createdString": "1439504708109",
         "devices": [
             {
                 "app_environment": "byte.ios",
                 "token": "<deviceToken>"
             }
         ],
-        "createdString": "1439504708109",
         "timeZone": "America/Toronto",
         "id": "<userId>"
     },
@@ -241,8 +249,10 @@ The `POST /account` endpoint is used to update information for the account corre
 
 | Parameter | Type | Description | Example |
 | :---: | :---: | :--- | :--- |
-| `timeZone` | String | Optional. [IANA](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) time zone. Defaults to `America/New_York`. | `"America/Toronto"` |
+| `timeZone` | String | Optional [IANA](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) time zone. Defaults to `America/New_York`. | `"America/Toronto"` |
 | `description` | String | Optional. | `""` |
+| `profilePhoto` | String | Optional path to uploaded profile photo. | `"http://lh3.googleusercontent.com/..."` |
+| `username` | String | Optional username. | `"adam"` |
 
 #### Sample Query
 
@@ -255,18 +265,18 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type:application/jso
 ```json
 {
     "data": {
-        "username": "",
+        "username": "<username>",
         "phoneSearchOptOut": false,
-        "description": "",
+        "description": null,
         "created": 1439504708109,
+        "createdString": "1439504708109",
         "devices": [
             {
                 "app_environment": "byte.ios",
                 "token": "<deviceToken>"
             }
         ],
-        "createdString": "1439504708109",
-        "timeZone": "America/New_York",
+        "timeZone": "America/Toronto",
         "id": "<userId>"
     },
     "success": 1
@@ -322,6 +332,258 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type:application/jso
     "success": 1
 }
 ```
+
+
+### **POST** `/account/check-name` (requires authentication header)
+
+The `POST /account/check-name` endpoint checks whether a name is available.
+
+#### Sample Query
+
+```bash
+curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/account/check-name -d '{"name": "<username>"}'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        "isAvailable": true
+    },
+    "success": 1
+}
+```
+
+
+### **GET** `/user/feed` (requires authentication header)
+
+The `GET /user/feed` endpoint retrieves the user's feed.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/user/feed'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        "cursor": "<cursor>",
+        "posts": [<post>, <post>, <post>]
+    },
+    "success": 1
+}
+```
+
+
+### **GET** `/users/recommended` (requires authentication header)
+
+The `GET /users/recommended` endpoint retrieves a list of suggested users to follow.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/recommended'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        "users": [<user>, <user>, <user>],
+    },
+    "success": 1
+}
+```
+
+
+### **GET** `/users/u/<username>` (requires authentication header)
+
+The `GET /users/u/<username>` endpoint looks up a user's profile.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/u/<username>'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        "cursor": null,
+        "posts": [<post>, <post>, <post>],
+        "user": {
+        "username": "ByteHQ",
+        "isFollowingYou": 0,
+        "isFollowedByYou": 1,
+        "description": null,
+        "profilePost": <post>
+    },
+    "success": 1
+}
+```
+
+
+### **GET** `/users/id/<userId>` (requires authentication header)
+
+The `GET /users/id/<userId>` endpoint looks up a user's profile.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/id/<userId>'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        "cursor": null,
+        "posts": [<post>, <post>, <post>],
+        "user": {
+        "username": "ByteHQ",
+        "isFollowingYou": 0,
+        "isFollowedByYou": 1,
+        "description": null,
+        "profilePost": <post>
+    },
+    "success": 1
+}
+```
+
+
+
+## Following
+
+Endpoints for following users
+
+| Method | Endpoint | Description |
+| :---: | :--- | :--- |
+| `POST` | [`/users/<userId>/follow`](#post-users-userid-follow-requires-authentication-header) | Follow the user with the giver userId. |
+| `DELETE` | [`/users/<userId>/follow`](#delete-users-userid-follow-requires-authentication-header) | Unfollow the user with the giver userId. |
+| `GET` | [`/users/<userId>/followers`](#get-users-userid-followers-requires-authentication-header) | Get a list of all users following the user with the giver userId. |
+| `GET` | [`/users/<userId>/following`](#get-users-userid-following-requires-authentication-header) | Get a list of all users followed by the user with the giver userId. |
+| `GET` | [`/users/<userId>/followers/mutual`](#get-users-userid-followers-mutual-requires-authentication-header) | Get a list of all users both following and followed by the user with the giver userId. |
+
+
+### **POST** `/users/<userId>/follow` (requires authentication header)
+
+The `POST /users/<userId>/follow` endpoint follows the given user.
+
+#### Sample Query
+
+```bash
+curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/<userId>/follow -d ""'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {},
+    "success": 1
+}
+```
+
+
+### **DELETE** `/users/<userId>/follow` (requires authentication header)
+
+The `DELETE /users/<userId>/follow` endpoint unfollows the given user.
+
+#### Sample Query
+
+```bash
+curl -X DELETE -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/<userId>/follow'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {},
+    "success": 1
+}
+```
+
+
+### **GET** `/users/<userId>/followers` (requires authentication header)
+
+The `GET /users/<userId>/followers` endpoint retrieves the list of users following the given user.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/<userId>/followers'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        {
+            "users": [<user>, <user>, <user>]
+        }
+    },
+    "success": 1
+}
+```
+
+
+### **GET** `/users/<userId>/following` (requires authentication header)
+
+The `GET /users/<userId>/following` endpoint retrieves the list of users followed by the given user.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/<userId>/following'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        {
+            "users": [<user>, <user>, <user>]
+        }
+    },
+    "success": 1
+}
+```
+
+
+### **GET** `/users/<userId>/followers/mutual` (requires authentication header)
+
+The `GET /users/<userId>/following` endpoint retrieves the list of users both following and followed by the given user.
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Content-Type:application/json" -H "Accept:application/json" https://api.byte.co/v1/users/<userId>/followers/mutual'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        {
+            "users": [<user>, <user>, <user>]
+        }
+    },
+    "success": 1
+}
+```
+
 
 
 
@@ -429,6 +691,7 @@ Each Byte consists of a number of pieces of information:
 
 <img src="./assets/byte-1.jpeg" width="350" />
 <img src="./assets/byte-2.jpeg" width="350" />
+<img src="./assets/byte-3.jpeg" width="350" />
 
 | Method | Endpoint | Description |
 | :---: | :--- | :--- |
@@ -436,6 +699,8 @@ Each Byte consists of a number of pieces of information:
 | `POST` | [`/posts/id`](#post-postsid-optional-authentication-header) | Returns a set of Bytes by ID |
 | `POST` | [`/posts/name`](#post-postsname-optional-authentication-header) | Returns one or more Bytes by name |
 | `GET` | [`/posts/self`](#get-postsself-requires-authentication-header) | Returns the set of Bytes created by a user |
+| `GET` | [`/posts/self/signed`](#get-postsselfsigned-requires-authentication-header) | Returns the set of signed Bytes created by a user |
+| `GET` | [`/posts/self/unsigned`](#get-postsselfunsigned-requires-authentication-header) | Returns the set of incognito Bytes created by a user |
 | `GET` | [`/posts/latest`](#get-postslatest-optional-authentication-header) | Returns a set of the most recent Bytes |
 | `GET` | [`/posts/popular`](#get-postspopular-optional-authentication-header) | Returns a set of the most popular Bytes |
 
@@ -462,47 +727,7 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
 {
     "data": {
         "post": {
-            "lookCount": 284,
-            "previewUrl": "<previewUrl>",
-            "id": "<postId>",
-            "comments": [
-                {
-                    "author": null,
-                    "point": {
-                        "y": 297.04230000000001,
-                        "x": 192.88130000000001
-                    },
-                    "sticker": "StickerThumbsUp",
-                    "created": 1439879220892,
-                    "createdString": "1439879220892",
-                    "postId": "<postId>",
-                    "type": "sticker",
-                    "id": "<commentId>"
-                }
-            ],
-            "thumbnailSrc": "<thumbnailSrc>",
-            "musicSrc": "<musicSrc>",
-            "hidden": false,
-            "boost": 0,
-            "updated": 1441050296279,
-            "authorType": "ByteUser",
-            "deleted": false,
-            "stickersCount": 11,
-            "createdString": "1439504831994",
-            "favCount": 16,
-            "name": "<postName>",
-            "thumbnails": {
-                "default": {
-                    "url": "<thumbnailUrl>",
-                    "id": "<thumbnailId>"
-                }
-            },
-            "package": {"<package>"},
-            "ownedByUser": true,
-            "created": 1439504831994,
-            "caption": "<caption>",
-            "updatedString": "1441050296279",
-            "commentsCount": 1
+            <post>
         }
     },
     "success": 1
@@ -533,7 +758,7 @@ Optional query params:
 #### Sample Query
 
 ```bash
-curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H "Content-Type:application/json" https://api.byte.co/v1/posts/id -d '{"ids": ["<id>"]}'
+curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H "Content-Type:application/json" https://api.byte.co/v1/posts/id -d '{"ids": ["<id>", "<id>"]}'
 ```
 
 #### Sample Response
@@ -541,51 +766,7 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H 
 ```json
 {
     "data": {
-        "posts": [
-            {
-                "lookCount": 284,
-                "previewUrl": "<previewUrl>",
-                "id": "<postId>",
-                "comments": [
-                    {
-                        "author": null,
-                        "point": {
-                            "y": 297.0,
-                            "x": 192.0
-                        },
-                        "sticker": "StickerThumbsUp",
-                        "created": 1439879220892,
-                        "createdString": "1439879220892",
-                        "postId": "<postId>",
-                        "type": "sticker",
-                        "id": "<commentId>"
-                    }
-                ],
-                "thumbnailSrc": "<thumbnailSrc>",
-                "musicSrc": "<musicSrc>",
-                "hidden": false,
-                "boost": 0,
-                "updated": 1441050296279,
-                "authorType": "ByteUser",
-                "deleted": false,
-                "stickersCount": 11,
-                "createdString": "1439504831994",
-                "favCount": 16,
-                "name": "<name>",
-                "thumbnails": {
-                    "default": {
-                        "url": "<thumbnailUrl>",
-                        "id": "<thumbnailId>"
-                    }
-                },
-                "package": {"<package>"},
-                "ownedByUser": true,
-                "created": 1439504831994,
-                "caption": "<caption>",
-                "updatedString": "1441050296279",
-                "commentsCount": 1
-            }
-        ]
+        "posts": [<post>, <post>]
     },
     "success": 1
 }
@@ -627,49 +808,24 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H 
 ```json
 {
     "data": {
-        "post": {
-            "lookCount": 284,
-            "previewUrl": "<previewUrl>",
-            "id": "<postId>",
-            "comments": [
-                {
-                    "author": null,
-                    "point": {
-                        "y": 297.0,
-                        "x": 192.0
-                    },
-                    "sticker": "StickerThumbsUp",
-                    "created": 1439879220892,
-                    "createdString": "1439879220892",
-                    "postId": "<postId>",
-                    "type": "sticker",
-                    "id": "<commentId>"
-                }
-            ],
-            "thumbnailSrc": "<thumbnailSrc>",
-            "musicSrc": "<musicSrc>",
-            "hidden": false,
-            "boost": 0,
-            "updated": 1441050296279,
-            "authorType": "ByteUser",
-            "deleted": false,
-            "stickersCount": 11,
-            "createdString": "1439504831994",
-            "favCount": 16,
-            "name": "<name>",
-            "thumbnails": {
-                "default": {
-                    "url": "<thumbnailUrl>",
-                    "id": "<thumbnailId>"
-                }
-            },
-            "package": {"<package>"},
-            "ownedByUser": true,
-            "created": 1439504831994,
-            "caption": "<caption>",
-            "updatedString": "1441050296279",
-            "commentsCount": 1
-        }
+        "post": <post>
+    },
+    "success": 1
+}
+```
+
+#### Sample Query
+
+```bash
+curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H "Content-Type:application/json" https://api.byte.co/v1/posts/name -d '{"names": ["<name>", "<name>"]}'
+```
+
+#### Sample Response
+
+```json
+{
+    "data": {
+        "posts": [<post>, <post>]
     },
     "success": 1
 }
@@ -685,7 +841,7 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Accept:application/json" -H 
 
 ### **GET** `/posts/self` (requires authentication header)
 
-The `GET /posts/self` endpoint returns all Bytes created by the user corresponding to the authentication token.
+The `GET /posts/self` endpoint returns all Bytes created by the requesting user.
 
 Optional query params:
 
@@ -704,43 +860,70 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
 {
   "data": {
     "cursor": "<cursor>",
-    "posts": [
-      {
-        "updated": 1441050312977,
-        "name": "<name>",
-        "created": 1439516560383,
-        "deleted": false,
-        "stickersCount": 7,
-        "createdString": "1439516560383",
-        "lookCount": 7,
-        "caption": "<caption>",
-        "thumbnailSrc": "<thumbnailSrc>",
-        "updatedString": "1441050312977",
-        "favCount": 0,
-        "id": "<postId>",
-        "commentsCount": 1
-      },
-      {
-        "updated": 1441050296279,
-        "name": "<name>",
-        "created": 1439504831994,
-        "deleted": false,
-        "stickersCount": 11,
-        "createdString": "1439504831994",
-        "lookCount": 281,
-        "caption": "<caption>",
-        "thumbnailSrc": "<thumbnailSrc>",
-        "updatedString": "1441050296279",
-        "favCount": 16,
-        "id": "<postId>",
-        "commentsCount": 6
-      }
-    ],
+    "posts": ["<post>", "<post>", "<post>"],
     "more": false
   },
   "success": 1
 }
 ```
+
+### **GET** `/posts/self/signed` (requires authentication header)
+
+The `GET /posts/self/signed` endpoint returns all signed Bytes created by the requesting user.
+
+Optional query params:
+
+* `scheme`: One of `summary` or `full`
+* `cursor`: A String designating the current position in a query result set
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" https://api.byte.co/v1/posts/self/signed
+```
+
+#### Sample Response
+
+```json
+{
+  "data": {
+    "cursor": "<cursor>",
+    "posts": ["<post>", "<post>", "<post>"],
+    "more": false
+  },
+  "success": 1
+}
+```
+
+
+### **GET** `/posts/self/unsigned` (requires authentication header)
+
+The `GET /posts/self/unsigned` endpoint returns all incognito Bytes created by the requesting user.
+
+Optional query params:
+
+* `scheme`: One of `summary` or `full`
+* `cursor`: A String designating the current position in a query result set
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" https://api.byte.co/v1/posts/self/unsigned
+```
+
+#### Sample Response
+
+```json
+{
+  "data": {
+    "cursor": "<cursor>",
+    "posts": ["<post>", "<post>", "<post>"],
+    "more": false
+  },
+  "success": 1
+}
+```
+
 
 
 ### **GET** `/posts/latest` (optional authentication header)
@@ -770,6 +953,11 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
         "posts": [
             {
                 "updated": 1441054312929,
+                "author": {
+                    "username": "<username>",
+                    "id": "<userId>",
+                    "profilePhoto": "<photoUrl>"
+                },
                 "name": "<name>",
                 "created": 1441054312929,
                 "deleted": false,
@@ -789,6 +977,75 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
     "success": 1
 }
 ```
+
+### **GET** `/posts/staff-picks` (optional authentication header)
+
+The `GET /posts/staff-picks` endpoint returns Bytes selected as noteworthy by Byte staff members.
+
+Optional query params:
+
+* `cursor`: A String designating the current position in a query result set
+
+#### Sample Query
+
+```bash
+curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" https://api.byte.co/v1/posts/staff-picks
+```
+
+#### Sample Response
+
+```json
+{
+  "data": {
+    "cursor": "<cursor>",
+    "posts": [
+      {
+        "updated": 1441050312977,
+        "author": {
+            "username": "<username>",
+            "id": "<userId>",
+            "profilePhoto": "<photoUrl>"
+        },
+        "name": "<name>",
+        "created": 1439516560383,
+        "deleted": false,
+        "stickersCount": 7,
+        "createdString": "1439516560383",
+        "lookCount": 7,
+        "caption": "<caption>",
+        "thumbnailSrc": "<thumbnailSrc>",
+        "updatedString": "1441050312977",
+        "favCount": 0,
+        "id": "<postId>",
+        "commentsCount": 1
+      },
+      {
+        "updated": 1441050296279,
+        "author": {
+            "username": "<username>",
+            "id": "<userId>",
+            "profilePhoto": "<photoUrl>"
+        },
+        "name": "<name>",
+        "created": 1439504831994,
+        "deleted": false,
+        "stickersCount": 11,
+        "createdString": "1439504831994",
+        "lookCount": 281,
+        "caption": "<caption>",
+        "thumbnailSrc": "<thumbnailSrc>",
+        "updatedString": "1441050296279",
+        "favCount": 16,
+        "id": "<postId>",
+        "commentsCount": 6
+      }
+    ],
+    "more": false
+  },
+  "success": 1
+}
+```
+
 
 
 ### **GET** `/posts/popular` (optional authentication header)
@@ -816,6 +1073,11 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
             {
                 "updated": 1441021189449,
                 "name": "<name>",
+                "author": {
+                    "username": "<username>",
+                    "id": "<userId>",
+                    "profilePhoto": "<photoUrl>"
+                },
                 "created": 1440071195668,
                 "deleted": false,
                 "stickersCount": 0,
@@ -841,7 +1103,7 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
 Users can place comments and stickers on individual Bytes. Offensive or inappropriate comments may be deleted without warning.
 Users can edit or delete comments that they created. The author of a post can delete other users' comments from it.
 
-<img src="./assets/byte-3.jpeg" width="350" />
+<img src="./assets/byte-4.jpeg" width="350" />
 
 | Method | Endpoint | Description |
 | :---: | :--- | :--- |
@@ -921,7 +1183,11 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
     "data": {
         "comment": {
             "body": "<body>",
-            "author": null,
+            "author": {
+                "username": "<username>",
+                "id": "<userId>",
+                "profilePhoto": "<photoUrl>"
+            },
             "point": {
                 "y": 297.0,
                 "x": 192.0
@@ -942,7 +1208,11 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
 {
     "data": {
         "comment": {
-            "author": null,
+            "author": {
+                "username": "<username>",
+                "id": "<userId>",
+                "profilePhoto": "<photoUrl>"
+            },
             "point": {
                 "y": 297.0,
                 "x": 192.0
@@ -1000,7 +1270,11 @@ curl -X PUT -H "Authorization: Bearer <token>" -H "Content-Type: application/jso
     "data": {
         "comment": {
             "body": "<updated body>",
-            "author": null,
+            "author": {
+                "username": "<username>",
+                "id": "<userId>",
+                "profilePhoto": "<photoUrl>"
+            },
             "point": {
                 "y": 297.0,
                 "x": 192.0
@@ -1021,7 +1295,11 @@ curl -X PUT -H "Authorization: Bearer <token>" -H "Content-Type: application/jso
 {
     "data": {
         "comment": {
-            "author": null,
+            "author": {
+                "username": "<username>",
+                "id": "<userId>",
+                "profilePhoto": "<photoUrl>"
+            },
             "point": {
                 "y": 297.0,
                 "x": 192.0
@@ -1076,20 +1354,20 @@ curl -X DELETE -H "Authorization: Bearer <token>" -H "Content-Type: application/
 
 
 
-## Stars
+## Bookmarks
 
-Users have the ability to star Bytes. This can be compared to a bookmark in the legacy web, with the added benefit of user notifications when starred Bytes are updated.
+Users have the ability to bookmark Bytes. This is similar to a bookmark in a web browser, with the added benefit of user notifications when bookmarked Bytes are updated. For legacy reasons the bookmark endpoints are prefixed with `fav`. Bookmarks were previously called stars.
 
 | Method | Endpoint | Description |
 | :---: | :--- | :--- |
-| `POST` | [`/posts/id/<string:post_id>/fav`](#post-postsidstringpost_idfav-requires-authentication-header) | Stars a Byte by ID |
-| `DELETE` | [`/posts/id/<string:post_id>/fav`](#delete-postsidstringpost_idfav-requires-authentication-header) | Removes a star from a Byte by ID |
-| `GET` | [`/posts/favs`](#get-postsfavs-requires-authentication-header) | Lists the current user's starred Bytes |
+| `POST` | [`/posts/id/<string:post_id>/fav`](#post-postsidstringpost_idfav-requires-authentication-header) | Bookmarks a Byte by ID |
+| `DELETE` | [`/posts/id/<string:post_id>/fav`](#delete-postsidstringpost_idfav-requires-authentication-header) | Removes a bookmark from a Byte by ID |
+| `GET` | [`/posts/favs`](#get-postsfavs-requires-authentication-header) | Lists the current user's bookmarked Bytes |
 
 
 ### **POST** `/posts/id/<string:post_id>/fav` (requires authentication header)
 
-The `POST /posts/id/<string:post_id>/fav` endpoint stars a Byte by ID.
+The `POST /posts/id/<string:post_id>/fav` endpoint bookmarks a Byte by ID.
 
 #### Sample Query
 
@@ -1109,7 +1387,7 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
 
 ### **DELETE** `/posts/id/<string:post_id>/fav` (requires authentication header)
 
-The `DELETE /posts/id/<string:post_id>/fav` endpoint removes a star from a Byte by ID.
+The `DELETE /posts/id/<string:post_id>/fav` endpoint removes a boomark from a Byte by ID.
 
 #### Sample Query
 
@@ -1129,7 +1407,7 @@ curl -X DELETE -H "Authorization: Bearer <token>" -H "Accept: application/json" 
 
 ### **GET** `/posts/favs` (requires authentication header)
 
-The `GET /posts/favs` endpoint gets a list of the current user's starred Bytes, ordered by post updated time.
+The `GET /posts/favs` endpoint gets a list of the current user's bookmarked Bytes, ordered by post updated time.
 
 Optional query params:
 
@@ -1288,7 +1566,8 @@ Byte triggers activity messages in a variety of situations, including:
 * Remixes
 * Links
 * Comments/Stickers
-* Stars
+* Mentions
+* Follows
 
 These are generally displayed in an activity feed; many messages are also sent as push notifications. We currently do not support push notifications on third–party clients, but this functionality is in progress (likely via a pub/sub model of sorts).
 
@@ -1313,7 +1592,7 @@ Message types include:
 * `"remix"`
 * `"comment"`
 * `"follow"`
-* `"fav"`
+* `"mention"`
 
 #### Sample Query
 
@@ -1332,8 +1611,9 @@ curl -X GET -H "Authorization: Bearer <token>" -H "Accept:application/json" http
                 "comment": {
                     "body": "<body>",
                     "author": {
-                        "username": "",
-                        "id": "<userId>"
+                        "username": "<username>",
+                        "id": "<userId>",
+                        "profilePhoto": "<photoUrl>"
                     },
                     "post": {
                         "updated": 1441050526811,
@@ -1447,12 +1727,23 @@ The asset in the package should then be updated with the return asset URL (this 
 
 The `POST /posts` endpoint is the big one: it creates a new Byte.
 
+Each post can optionally have a caption which is a freeform description string.
+Posts also have a name which must be unique. The name is part of the URL to access the Byte in a web browser (e.g. byte.co/bytename).
+If you don't supply a name a random one is chosen for you.
+
+If the `profile` flag is included and set to true the post will become the background of the user's profile page.
+The `signed` flag controls whether the post will be attributed to the user who created it or not.
+If the user has not claimed a username they cannot sign their Bytes. If the user has a username `signed` defaults to true but can be set to false to make an incognito Byte.
+
+
 | Parameter | Type | Description | Example |
 | :---: | :---: | :--- | :--- |
 | `package` | Object | Required. The package, as defined by [BFF](./bff.md). | See: [BFF](./bff.md) |
+| `thumbnailUrl` | String | Required. A link to the thumbnail asset.  | `"https://storage.googleapis.com/assets.byte.co/x.png"` |
 | `caption` | String | Optional. | `The Old Man and the Sea` |
 | `name` | String | Optional. | `fdskljdfs#` |
-| `thumbnailUrl` | String | Required. A link to the thumbnail asset.  | `"https://storage.googleapis.com/assets.byte.co/x.png"` |
+| `profile` | Boolean | Optional. | `false` |
+| `signed` | Boolean | Optional. | `false` |
 | `return_inflated_post` | Boolean | Optional. Defaults to True. | `false` |
 
 #### Sample Query
@@ -1470,6 +1761,11 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
       "lookCount": 0,
       "previewUrl": "<previewUrl>",
       "id": "<postId>",
+      "author": {
+          "username": "<username>",
+          "id": "<userId>",
+          "profilePhoto": "<photoUrl>"
+      },
       "comments": [],
       "thumbnailSrc": "<thumbnailSrc>",
       "musicSrc": "<musicSrc>",
@@ -1515,13 +1811,16 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
 ### **PUT** `/posts/id/<string:post_id>` (requires authentication header)
 
 The `PUT /posts/id/<string:post_id>` endpoint allows for updating/editing a Byte.
+You only need to include parameters for attributes you want to change.
+Note that profile Bytes must be signed.
 
 | Parameter | Type | Description | Example |
 | :---: | :---: | :--- | :--- |
-| `package` | Object | Required. The package, as defined by [BFF](./bff.md). | See: [BFF](./bff.md) |
+| `package` | Object | Optional. The package, as defined by [BFF](./bff.md). | See: [BFF](./bff.md) |
 | `caption` | String | Optional. | `The Old Man and the Sea` |
 | `name` | String | Optional. | `fdskljdfs#` |
-| `thumbnailUrl` | String | Required. A link to the thumbnail asset.  | `"https://storage.googleapis.com/assets.byte.co/x.png"` |
+| `thumbnailUrl` | String | Optional. A link to the thumbnail asset.  | `"https://storage.googleapis.com/assets.byte.co/x.png"` |
+| `signed` | Boolean | Optional. | `true` |
 
 #### Sample Query
 
@@ -1536,6 +1835,11 @@ curl -X PUT -H "Authorization: Bearer <token>" -H "Content-Type: application/jso
   "data": {
     "post": {
       "lookCount": 0,
+      "author": {
+          "username": "<username>",
+          "id": "<userId>",
+          "profilePhoto": "<photoUrl>"
+      },
       "previewUrl": "<previewUrl>",
       "id": "<postId>",
       "comments": [],
