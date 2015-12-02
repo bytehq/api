@@ -31,7 +31,7 @@ Importantly, **the coordinate space in a bff is top-left aligned**.
 ```
 ##Version
 
-The format of the `version` property is `"1.1"`.
+The format of the `version` property is `"1.2"`.
 
 Versions are incremented with the following rules:
 
@@ -215,6 +215,10 @@ Animation `id` | | Description
 `rotate` | Rotate clockwise | Makes an object rotate clockwise
 `soon` | Soon Zoom | Zooms an object ominously
 `fireworks` | Fireworks | Emits numerous copies of thing, like fireworks
+`explode` | Explode | Forces the object to shatter into pieces
+`pulse` | Pulse | Applies a subtle pulse to the object
+`fade` | Fade | Fades the object in and out
+`right-to-left` | Right to Left | Moves the object onscreen and offscreen from right to left
 
 *Rules and pseudo-code to replicate each `effect` will be published soon.*
 
@@ -287,5 +291,8 @@ Style | Font
 
 ##Changelog
 
-Version 1.1:
+###Version 1.1
 * Added optional `originalSrc` property to objects
+
+###Version 1.2: 
+* Added several new supported `effects` values
