@@ -1,5 +1,4 @@
-# Bytehub 
-Byte for everyone 
+# Bytehub - Byte for everyone 
 
 * **[API Docs](./api.md)**
 * **[Byte File Format (BFF)](./bff.md)**
